@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 dotenv.config(); // Load environment variables
 
@@ -9,6 +10,9 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware for parsing JSON
 app.use(express.json());
+
+// Enable CORS for all routes
+app.use(cors());
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })

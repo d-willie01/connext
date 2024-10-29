@@ -1,35 +1,60 @@
 import React from "react";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import { useSegments, useRouter } from "expo-router";
 
 export const StateContext = createContext();
 
 const StateProvider = ({children}) => {
     
-    
-const [UState, setUState] = useState(0);
-const [userToken, setUserToken] = useState(0);
+const rootSegement = useSegments()[0];
+const router = useRouter();  
+const [UState, setUState] = useState(null);
+const [userToken, setUserToken] = useState(undefined);
 
- 
+//useEffect checking for value of UState while also checking the segment of the route. basic and essential Auth is a GO
 
-    const UserState = () => {
-        
-        setUState(1);
-        console.log('kiggly')
-        console.log(UState);
+useEffect(() =>{
 
-    
-    }
+        if (UState === null) return
 
-    const LogoutUser = () =>{
-        setUState(null)
-    }
+        if (UState === true && rootSegement !== "(app)")
+        {
+            router.replace("/home/(tabs)")
+        }
+        if (UState === false && rootSegement !== "(app)")
+            {
+                router.replace("/")
+            }
+
+
+    },[UState, rootSegement])
 
 
     return (
-        <StateContext.Provider value ={{ UserState, UState, LogoutUser, }} >
+        <StateContext.Provider value ={{ UserState: () =>{
+            setUState(true)
+        }, UState, LogoutUser: () =>{
+            setUState(false)
+        }, resetUser: () =>{
+            setUState(null)
+        } }} >
             {children}
         </StateContext.Provider>
     )
 }
 
 export default StateProvider;
+
+
+// const UserState = () => {
+        
+    //     setUState("");
+    //     console.log('kiggly')
+        
+
+    
+    // }
+
+    // const LogoutUser = () =>{
+    //     setUState(null)
+    // }

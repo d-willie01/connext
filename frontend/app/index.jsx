@@ -1,12 +1,12 @@
 import { View, Text, Button } from 'react-native'
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import { Link } from 'expo-router'
 import { StateContext } from '../state/stateManagement'
 
 export default function index() {
   
-  const {UState} = useContext(StateContext);
-  console.log(UState)
+  const {resetUser, UState} = useContext(StateContext);
+ 
 
   return (
 
