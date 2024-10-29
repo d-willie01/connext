@@ -6,14 +6,15 @@ export const StateContext = createContext();
 const StateProvider = ({children}) => {
     
     
-const [UState, setUState] = useState(null);
-const [userToken, setUserToken] = useState(null);
+const [UState, setUState] = useState(0);
+const [userToken, setUserToken] = useState(0);
 
  
 
     const UserState = () => {
         
-        setUState(false);
+        setUState(1);
+        console.log('kiggly')
         console.log(UState);
 
     
