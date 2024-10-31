@@ -16,7 +16,7 @@ const [password, setPassword] = useState("");
 
 
     try {
-      const {data} = await axios.post('http://localhost:5000/api/contacts/add')
+      const {data} = await axios.get('http://localhost:5000/login')
 
     console.log(data)
 

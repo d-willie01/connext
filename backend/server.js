@@ -2,8 +2,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const { auth } = require('express-openid-connect');
 
 dotenv.config(); // Load environment variables
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'a long, randomly-generated string stored in env',
+  baseURL: 'http://localhost:3000',
+  clientID: 'uwz8NErzr2EE1skPbh4nhOwuQiRfVL5d',
+  issuerBaseURL: 'https://dev-hze3tt2ib00gwppc.us.auth0.com'
+};
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +36,12 @@ app.get('/', (req, res) => {
 
 const contactRoutes = require('./routes/contacts');
 app.use('/api/contacts', contactRoutes);
+
+app.use(auth(config));
+
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
 
 
 app.listen(PORT, () => {
