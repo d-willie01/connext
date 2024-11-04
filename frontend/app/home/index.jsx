@@ -5,16 +5,18 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useRouter } from 'expo-router';
 
+
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
+
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: '421142469261-dohcrm2tpuof0m727bf61ij25f7d237g.apps.googleusercontent.com',
+    clientId: process.env.EXPO_PUBLIC_GOOGLE_API,
     scopes:['openid', 'profile', 'email'],
-    redirectUri: 'https://connext-f0u.pages.dev/home/(tabs)',
+    redirectUri: `${process.env.EXPO_PUBLIC_BASE_URL}/home/(tabs)`,
   });
 
   React.useEffect(() => {
