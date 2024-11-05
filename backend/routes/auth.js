@@ -7,7 +7,6 @@ const dotenv = require('dotenv');
 
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const JWT_SECRET = process.env.JWT_SECRET; // Replace with a strong, secure secret
 
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
@@ -39,12 +38,14 @@ function generateToken(user) {
     userId: user._id,
     email: user.email,
   };
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 }
 
-// Route handler for /auth/google
-router.post('/auth/google', async (req, res) => {
-  const { token: idToken } = req.body;
+// Route handler
+router.post('/', async (req, res) => {
+  
+  const { authentication: idToken } = req.body;
+
 
   try {
     // Verify Google ID token
@@ -59,13 +60,15 @@ router.post('/auth/google', async (req, res) => {
     // Send the JWT back to the frontend
     res.json({ token: jwtToken });
   } catch (error) {
+
     console.error("Authentication error:", error);
+    
     res.status(401).json({ error: "Authentication failed" });
   }
 });
 
 router.get('/', (req, res) => {
-    const man = 'eat my booty hole';
+    const man = 'no get boi';
     res.send(man);
   });
 
