@@ -3,6 +3,10 @@ import React, {useContext, useEffect} from 'react'
 import { Link } from 'expo-router'
 import { StateContext } from '../state/stateManagement'
 
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession()
+
 export default function index() {
   
   const {resetUser, UState} = useContext(StateContext);
@@ -17,7 +21,6 @@ export default function index() {
       justifyContent:'center'
     }}>
       Welcome
-
       <Link href="/home">
       <Button title="Login"/>
       </Link>

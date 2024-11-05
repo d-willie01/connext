@@ -1,25 +1,28 @@
-
 import React, {useState} from 'react';
 import { Button, View, TextInput } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import * as AuthSession from 'expo-auth-session';
 import { useRouter } from 'expo-router';
 
 
-WebBrowser.maybeCompleteAuthSession();
-
 export default function App() {
 
+  
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId: process.env.EXPO_PUBLIC_GOOGLE_API,
     scopes:['openid', 'profile', 'email'],
-    redirectUri: `${process.env.EXPO_PUBLIC_BASE_URL}/home/(tabs)`,
+    redirectUri: `${process.env.EXPO_PUBLIC_BASE_URL}`,
   });
 
   React.useEffect(() => {
+  
     console.log(response)
     if (response?.type === 'success') {
       console.log(response)
@@ -27,7 +30,8 @@ export default function App() {
       // Send token to backend for validation and user creation
 
       //push user to homescreen
-      router.push('/home/(tabs)')
+      
+      router.replace('/home/(tabs)');
     }
   }, [response]);
 
@@ -128,3 +132,12 @@ export default function App() {
     // </View>
 //   )
 // }
+
+
+//redirect uri attempt to close the window after authentication
+
+// const redirectUri = AuthSession.makeRedirectUri({
+//   native: `${process.env.EXPO_PUBLIC_BASE_URL}/home/(tabs)`, // For iOS/Android standalone apps
+//   useProxy: true,                // This adds Expo's redirect proxy for Expo Go in development
+//   // You can add a custom URI for production web apps if needed
+// });
