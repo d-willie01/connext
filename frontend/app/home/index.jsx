@@ -11,16 +11,20 @@ export default function App() {
 
   const router = useRouter();
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(""); 
+
+  
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId: process.env.EXPO_PUBLIC_GOOGLE_API,
     responseType:"id_token",
     scopes:['openid', 'profile', 'email'],
-    redirectUri: `${process.env.EXPO_PUBLIC_BASE_URL}`,
+    redirectUri: 'https://connext-f0u.pages.dev',
   });
 
   const sendToken = async(authentication) =>{
+
+    
 
 
     console.log(authentication)
@@ -42,11 +46,13 @@ export default function App() {
   }
 
   React.useEffect(() => {
-  
+    
     
     if (response?.type === 'success') {
       
       //extract token from google
+
+     
 
       const authentication = response.params.id_token
       
