@@ -19,7 +19,7 @@ export default function App() {
     clientId: process.env.EXPO_PUBLIC_GOOGLE_API,
     responseType:"id_token",
     scopes:['openid', 'profile', 'email'],
-    redirectUri: 'https://connext-f0u.pages.dev',
+    redirectUri: 'http://localhost:8081',
   });
 
   const sendToken = async(authentication) =>{
@@ -30,7 +30,8 @@ export default function App() {
     console.log(authentication)
     try {
       
-      const response = await axios.post('http://localhost:5000/api/auth', {            
+      console.log(process.env.EXPO_PUBLIC_API_URL)
+      const response = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/api/auth`, {            
           authentication
 })
   console.log(response)
