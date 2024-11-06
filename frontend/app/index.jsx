@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, useWindowDimensions, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const WelcomeScreen = () => {
   const { width, height } = useWindowDimensions();
