@@ -20,7 +20,7 @@ export default function App() {
     clientId: process.env.EXPO_PUBLIC_GOOGLE_API,
     responseType: "id_token",
     scopes: ['openid', 'profile', 'email'],
-    redirectUri: 'http://localhost:8081',
+    redirectUri: 'https://connext-f0u.pages.dev',
   });
 
   const sendToken = async (authentication) => {
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   nightModeToggle: {
     alignSelf: 'center',
-    marginTop: 20,
+    marginTop: 15,
   },
   toggleText: {
     color: '#007AFF',
