@@ -7,13 +7,18 @@ const authRoute = require('./routes/auth');
 dotenv.config(); // Load environment variables
 
 const app = express();
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000 
 
 // Middleware for parsing JSON
 app.use(express.json());
 
 // Enable CORS for all routes
 app.use(cors());
+
+// Simple route to test
+app.get('/', (req, res) => {
+  res.send('Backend for the Outreach App is running!');
+});
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
@@ -35,7 +40,3 @@ app.listen(PORT, () => {
 
 
 
-// Simple route to test
-// app.get('/', (req, res) => {
-//   res.send('Backend for the Outreach App is running!');
-// });

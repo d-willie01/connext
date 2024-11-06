@@ -6,7 +6,6 @@ import * as AuthSession from 'expo-auth-session';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
 
-
 export default function App() {
 
   const router = useRouter();
@@ -19,7 +18,10 @@ export default function App() {
     clientId: process.env.EXPO_PUBLIC_GOOGLE_API,
     responseType:"id_token",
     scopes:['openid', 'profile', 'email'],
-    redirectUri: 'http://localhost:8081',
+    //VERY IMPORTANT MUST BE HARDCODED
+    //https://connext-f0u.pages.dev
+    //http://localhost:8081
+    redirectUri: 'https://connext-f0u.pages.dev',
   });
 
   const sendToken = async(authentication) =>{
