@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, useWindowDimensions, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
+import { StateContext } from '../state/stateManagement';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const WelcomeScreen = () => {
+
+  const {UState} = useContext(StateContext)
+  console.log(UState)
   const { width, height } = useWindowDimensions();
   const [isHovered, setIsHovered] = useState(false);
 

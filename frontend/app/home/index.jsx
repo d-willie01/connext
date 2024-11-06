@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AuthSession from 'expo-auth-session';
@@ -8,9 +8,12 @@ import axios from 'axios';
 import { FontAwesome } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
+import { StateContext } from '../../state/stateManagement';
 
 
 export default function App() {
+  const {setLoadingOn, loading, setLoadingOff} = useContext(StateContext)
+
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,18 +23,23 @@ export default function App() {
     clientId: process.env.EXPO_PUBLIC_GOOGLE_API,
     responseType: "id_token",
     scopes: ['openid', 'profile', 'email'],
-    redirectUri: 'https://connext-f0u.pages.dev',
+    redirectUri: 'http://localhost:8081'
+    //redirectUri: 'https://connext-f0u.pages.dev',
   });
 
   const sendToken = async (authentication) => {
     try {
       const response = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/api/auth`, { authentication });
       if (response.status === 200) {
-        router.replace('/home/(tabs)');
+        router.replace('/home/(tabs)')
+        
+        setLoadingOff()
       }
     } catch (error) {
       console.log(error);
       alert(error.message);
+      setLoadingOff();
+      
     }
   };
 
@@ -39,6 +47,10 @@ export default function App() {
     if (response?.type === 'success') {
       const authentication = response.params.id_token;
       sendToken(authentication);
+    }
+    else if (response?.type === 'dismiss' || response?.type === 'cancel')
+    {
+      setLoadingOff();
     }
   }, [response]);
 
@@ -63,7 +75,7 @@ export default function App() {
       
       <View style={styles.socialContainer}>
         
-        <TouchableOpacity style={styles.socialButton} onPress={() => promptAsync()}><FontAwesome name="google" size={50} color={isNightMode ? "#db4437" : "#db4437"} /></TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton} onPress={() => {promptAsync(), setLoadingOn()}}><FontAwesome name="google" size={50} color={isNightMode ? "#db4437" : "#db4437"} /></TouchableOpacity>
         
       </View>
 
@@ -74,7 +86,16 @@ export default function App() {
           <Entypo name="moon" size={24} color="black" />
         </View>)}</Text>
       </TouchableOpacity>
+
+      {loading && (
+        <View style={styles.overlay}>
+          <ActivityIndicator size="large" color="#ffffff" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      )}
     </View>
+
+    
   );
 }
 
@@ -147,6 +168,20 @@ const styles = StyleSheet.create({
   },
   toggleText: {
     color: '#007AFF',
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dimmed background
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: '#ffffff',
+    marginTop: 10,
   },
 });
 
