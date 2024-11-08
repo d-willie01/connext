@@ -3,12 +3,13 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator 
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AuthSession from 'expo-auth-session';
-import { useRouter } from 'expo-router';
+import { useRouter, Link } from 'expo-router';
 import axios from 'axios';
 import { FontAwesome } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
 import { StateContext } from '../../state/stateManagement';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function App() {
@@ -16,7 +17,7 @@ export default function App() {
 
   const router = useRouter();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
   const [isNightMode, setIsNightMode] = useState(false);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -24,15 +25,16 @@ export default function App() {
     responseType: "id_token",
     scopes: ['openid', 'profile', 'email'],
     redirectUri: 'http://localhost:8081'
-    //redirectUri: 'https://connext-f0u.pages.dev',
+    // redirectUri: 'https://connext-f0u.pages.dev',
   });
 
   const sendToken = async (authentication) => {
     try {
-      const response = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/api/auth`, { authentication });
+      const response = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/auth`, { authentication });
       if (response.status === 200) {
-        router.replace('/home/(tabs)')
         
+         await AsyncStorage.setItem("AccessToken", response.data.token)
+        router.replace('/home/(tabs)')
         setLoadingOff()
       }
     } catch (error) {
@@ -68,7 +70,9 @@ export default function App() {
       
 
       <TouchableOpacity style={styles.button}>
+        <Link href={'/home/(tabs)'}>
         <Text style={styles.buttonText}>Sign Up</Text>
+        </Link>
       </TouchableOpacity>
 
       <Text style={[styles.orText, isNightMode ? styles.darkText : styles.lightText]}>or sign up with</Text>
