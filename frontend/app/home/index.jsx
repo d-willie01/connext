@@ -30,6 +30,7 @@ export default function App() {
 
   const sendToken = async (authentication) => {
     try {
+      console.log(process.env.EXPO_PUBLIC_API_URL)
       const response = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/auth`, { authentication });
       if (response.status === 200) {
         

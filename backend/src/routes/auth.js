@@ -38,7 +38,7 @@ function generateToken(user) {
     userId: user._id,
     email: user.email,
   };
-  return jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+  return jwt.sign(payload, process.env.JWT_SECRET_KEY, { algorithm: "HS256", expiresIn: '1h' });
 }
 
 // Route handler

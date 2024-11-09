@@ -10,7 +10,7 @@ export default function _layout() {
         }} name ="campaigns"/>
         <Tabs.Screen options={{
           headerShown: false
-        }} name ="settings" />
+        }} name ="explore" />
     </Tabs>
   )
 }
