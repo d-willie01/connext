@@ -24,8 +24,8 @@ export default function App() {
     clientId: process.env.EXPO_PUBLIC_GOOGLE_API,
     responseType: "id_token",
     scopes: ['openid', 'profile', 'email'],
-    redirectUri: 'http://localhost:8081'
-    // redirectUri: 'https://connext-f0u.pages.dev',
+    // redirectUri: 'http://localhost:8081'
+    redirectUri: 'https://connext-f0u.pages.dev',
   });
 
   const sendToken = async (authentication) => {

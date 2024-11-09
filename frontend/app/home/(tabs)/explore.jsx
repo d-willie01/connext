@@ -1,43 +1,42 @@
-import { View, Text, Button, FlatList, StyleSheet } from 'react-native'
+import React, {useState, useEffect} from 'react';
+import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 import axios from 'axios';
-import { Ionicons } from '@expo/vector-icons'
-import { ScoreBox } from '../../../components/scoreBox';
+import { Ionicons } from '@expo/vector-icons';
+import {ScoreBox} from '../../../components/scoreBox'
 
-
-
-export default function settings() {
-
-
+export default function Settings() {
   const matchData = [
     {
       time: '09:30 AM',
       team1: {
-        name: 'Indian Pacer',
+        name: 'Indian Pacers',
         score: 118,
         logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1b/Indiana_Pacers.svg/1200px-Indiana_Pacers.svg.png',
       },
       team2: {
         name: 'Houston Rockets',
         score: 106,
-        logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1b/Indiana_Pacers.svg/1200px-Indiana_Pacers.svg.png',
+        logo: 'https://upload.wikimedia.org/wikipedia/en/2/28/Houston_Rockets.svg',
       },
     },
     // ... other matches
   ];
-  
-  const getData = async() =>{
-    
+
+  const [BData, setBData] = useState({});
+
+  const getData = async () => {
     try {
-      response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/data/NBA`)
+      const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/data/NBA`);
+      const {events} = response.data
+      setBData(events)
+      console.log(BData)
 
-      console.log(response)
-      
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
+  };
 
 
-  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -45,13 +44,16 @@ export default function settings() {
         <Text style={styles.headerTitle}>League Details</Text>
       </View>
       <FlatList
-        data={matchData}
+        data={BData}
         renderItem={({ item }) => <ScoreBox match={item} />}
         keyExtractor={(item) => item.time}
         contentContainerStyle={styles.matchList}
       />
+
+      <Button onPress={getData} title="DATA"/>
+     
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -61,8 +63,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    alignItems:   
- 'center',
+    alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: '#292929',
@@ -72,39 +73,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
-  },
-  matchItem: {
-    flexDirection: 'row', // Use flex direction for responsive layout
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#292929',
-    marginBottom: 10,
-  },
-  teamLogos: {
-    flex: 1, // Allocate space for logos
-    alignItems: 'center',
-  },
-  teamLogo: {
-    width: '40%', // Use percentage for responsive width
-    height: '40%',
-  },
-  teamScores: {
-    flex: 1, // Allocate space for scores
-    alignItems: 'center',
-  },
-  teamScore: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  teamNames: {
-    flex: 1, // Allocate space for names
-    alignItems: 'center',
-  },
-  teamName: {
-    fontSize: 14,
     color: 'white',
   },
   matchList: {
